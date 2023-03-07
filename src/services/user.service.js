@@ -3,23 +3,23 @@ const UserModel = require('../models/user.model');
 class UserService {
 
     // Create User
-    async createUser(user) {
-        return await UserModel.create(user);
+    async createUser(data) {
+        return await UserModel.create(data);
     }
 
     // Update User
-    async updateUser(user) {
-        return await UserModel.findOneAndUpdate(user);
+    async updateUser(id, data) {
+        return await UserModel.findByIdAndDelete(id, data, {new: true});
     }
 
     // Delete User
-    async deleteUser(user) {
-        return await UserModel.findOneAndDelete(user);
+    async deleteUser(id) {
+        return await UserModel.findByIdAndDelete(id);
     }
 
     // Fetch User
-    async fetchUser(fiter) {
-        return await UserModel.findOne(filter);
+    async fetchUser(id) {
+        return await UserModel.findById(id);
     }
 
     // Fetch Users
