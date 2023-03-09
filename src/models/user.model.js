@@ -5,19 +5,26 @@ const validator = require('validator')
 const userSchema = new Schema({
     username: {
         type: String,
-        required: true,
+        required: [
+            true, 'Enter Your Username'
+        ],
         unique: true,
-        trim: true
+        trim: true,
+        lowercase: true
     },
     email: {
         type: String,
-        required: true,
+        required: [
+            true,
+            'Enter your email address'
+        ],
         unique: true,
         trim: true,
         validate: [
             validator.isEmail,
-            'Input an email address'
-        ]
+            'Enter a valid email address'
+        ],
+        lowercase: true
     },
     password: {
         type: String,
