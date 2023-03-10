@@ -9,12 +9,12 @@ class UserService {
 
     // Update User
     async updateUser(id, data) {
-        return await UserModel.findByIdAndDelete(id, data, {new: true});
+        return await UserModel.findByIdAndDelete(id, data, { new: true });
     }
 
     // Delete User
-    async deleteUser(id) {
-        return await UserModel.findByIdAndDelete(id);
+    async softDeleteUser(id) {
+        return await UserModel.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     }
 
     // Fetch User by ID
