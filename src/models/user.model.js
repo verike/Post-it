@@ -28,9 +28,9 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: [true, 'Enter your password'],
         trim: true,
-        minLength: 6
+        minlength: [6, 'Minimum password length is 6 characters']
     },
     confirmPassword: {
         type: String,
@@ -39,12 +39,36 @@ const userSchema = new Schema({
             validator: function (value) {
                 return value === this.password
             },
-            message: 'Confirm password'
+            message: 'Confirm the password above'
         }
     },
-    isDeleted: { type: Boolean, default: false}
+    isDeleted: { type: Boolean, default: false }
 
-}, {timestamps: true});
+}, { timestamps: true });
+
+
+// Hashing password with mongoose pre hook
+userSchema.pre('save', async function (next) {
+    const salt = bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt)
+    next();
+
+})
+
+// Static method to login user
+userSchema.static.login = async function (email, password) {
+    const user = await this.findOne({email: email});
+    if (user) {
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+            return user;
+        }
+        throw Error('Incorrect password')
+    }
+    else {
+        throw Error('Incorrect email')
+    }
+}
 
 const UserModel = model('user', userSchema);
 module.exports = UserModel;
