@@ -10,7 +10,8 @@ const userSchema = new Schema({
         ],
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        minLength: [6, 'Minimum username length is 6 characters']
     },
     email: {
         type: String,
