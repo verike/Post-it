@@ -8,13 +8,13 @@ class PostService {
     }
 
     // Update Post
-    async updatePost(id) {
-        return await PostModel.findByIdAndDelete(id, data, {new: true});
+    async updatePost(id, data) {
+        return await PostModel.findByIdAndUpdate(id, data, { new: true });
     }
 
     // Delete Post
-    async deletePost(id) {
-        return await PostModel.findByIdAndDelete(id);
+    async softDeletePost(id) {
+        return await PostModel.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     }
 
     // Fetch Post
