@@ -27,6 +27,11 @@ class UserService {
         return await UserModel.findOne(name)
     }
 
+    // Fetch user by email
+    async fetchUserByEmail(email) {
+        return await UserModel.findOne(email)
+    }
+
     // Fetch Users
     async fetchUsers(filter) {
         return await UserModel.find(filter);
