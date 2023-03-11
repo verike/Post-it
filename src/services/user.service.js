@@ -9,27 +9,27 @@ class UserService {
 
     // Update User
     async updateUser(id, data) {
-        return await UserModel.findByIdAndDelete(id, data, { new: true });
+        return await UserModel.findByIdAndUpdate({ _id: id }, data, { new: true });
     }
 
     // Delete User
     async softDeleteUser(id) {
-        return await UserModel.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+        return await UserModel.findByIdAndUpdate({ _id: id }, { isDeleted: true }, { new: true });
     }
 
     // Fetch User by ID
     async fetchUserById(id) {
-        return await UserModel.findById(id);
+        return await UserModel.findById({ _id: id });
     }
 
     // Fetch User by username
     async fetchUserByName(name) {
-        return await UserModel.findOne(name)
+        return await UserModel.findOne({ username: name })
     }
 
     // Fetch user by email
     async fetchUserByEmail(email) {
-        return await UserModel.findOne(email)
+        return await UserModel.findOne({ email: email })
     }
 
     // Fetch Users
