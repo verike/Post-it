@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt')
 const validator = require('validator')
 
 // User Schema Schema
@@ -49,16 +50,19 @@ const userSchema = new Schema({
 
 
 // Hashing password with mongoose pre hook
-userSchema.pre('save', async function (next) {
-    const salt = bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt)
-    next();
+userSchema.pre("save", async function (next) {
+    // This only works if the password is modified
+    if (!this.isModified("password") && !this.isModified("confirmPassword")) return next();
+  
+    //Hash the password with cost/salt of 10
+    this.password = await bcrypt.hash(this.password, 10);
+    this.confirmPassword = await bcrypt.hash(this.confirmPassword, 10);
+  
+  });
 
-})
-
-// Static method to login user
-userSchema.static.login = async function (email, password) {
-    const user = await this.findOne({email: email});
+// Method to login user
+userSchema.methods.login = async function (email, password) {
+    const user = await UserModel.findOne({email: email});
     if (user) {
         const auth = await bcrypt.compare(password, user.password);
         if (auth) {
