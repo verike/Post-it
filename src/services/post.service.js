@@ -4,22 +4,22 @@ class PostService {
 
     // Create Post
     async createPost(data) {
-        return await PostModel.create(DataView);
+        return await PostModel.create(data);
     }
 
     // Update Post
     async updatePost(id, data) {
-        return await PostModel.findByIdAndUpdate(id, data, { new: true });
+        return await PostModel.findByIdAndUpdate({_id: id}, data, { new: true });
     }
 
     // Delete Post
     async softDeletePost(id) {
-        return await PostModel.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+        return await PostModel.findByIdAndUpdate({ _id: id }, { isDeleted: true }, { new: true });
     }
 
     // Fetch Post
     async fetchPost(id) {
-        return await PostModel.findById(id)
+        return await PostModel.findById({_id: id})
     }
 
     // Fetch Posts
