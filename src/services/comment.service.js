@@ -9,21 +9,21 @@ class CommentService {
 
     // Update comment
     async updateComment(id, data) {
-        return await CommentModel.findByIdAndUpdate(id, data, { new: true });
+        return await CommentModel.findByIdAndUpdate({ _id: id }, data, { new: true });
     }
 
     // Delete comment
-    async deleteComment(id) {
-        return await CommentModel.findByIdAndDelete(id);
+    async softDeleteComment(id) {
+        return await CommentModel.findByIdAndUpdate({ _id: id }, { isDeleted: true }, { new: true });
     }
 
     // Fetch a comment
     async fetchComment(id) {
-        return await CommentModel.findById(id);
+        return await CommentModel.findById({ _id: id });
     }
 
     // Fetch all comments
-    async fetchAllComments() {
+    async fetchComments() {
         return await CommentModel.find();
     }
 
