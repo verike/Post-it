@@ -40,7 +40,7 @@ class UserController {
             try {
                 const existingUser = await UserService.fetchUserById(req.params.id);
                 if (existingUser) {
-                    const updateUser = await UserService.updateUser({ _id: req.params.id, username: username, email: email, password: password, confirmPassword: confirmPassword });
+                    const updateUser = await UserService.updateUser(req.params.id, { username: username, email: email, password: password, confirmPassword: confirmPassword });
                     return res.status(201).json({
                         success: true,
                         message: 'User successfully updated',
