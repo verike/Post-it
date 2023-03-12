@@ -3,20 +3,21 @@ const UserModel = require('../models/user.model');
 const PostModel = require('../models/post.model');
 
 const commentSchema = new Schema({
-    user: {
+    postId: {
         type: Schema.Types.ObjectId,
-        ref: UserModel
+        ref: 'post'
     },
     body: {
         type: String,
         required: true,
         trim: false,
     },
-    postId: {
+    user: {
         type: Schema.Types.ObjectId,
-        ref: PostModel
-    }
-}, {timestamps: true});
+        ref: 'user'
+    },
+    isDeleted: { type: Boolean, default: false }
+}, { timestamps: true });
 
 const CommentModel = model('comment', commentSchema);
 module.exports = CommentModel;
