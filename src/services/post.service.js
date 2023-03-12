@@ -14,7 +14,7 @@ class PostService {
 
     // Delete Post
     async softDeletePost(id) {
-        return await PostModel.findByIdAndUpdate({ _id: id }, { isDeleted: true }, { new: true });
+        return await PostModel.findByIdAndUpdate({ _id: id }, { isDeleted: true }, { new: true })
     }
 
     // Fetch Post
