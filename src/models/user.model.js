@@ -44,6 +44,11 @@ const userSchema = new Schema({
             message: 'Confirm the password above'
         }
     },
+    posts:  [{
+        type: Schema.Types.ObjectId,
+        ref: 'post',
+        required: true
+    }],
     isDeleted: { type: Boolean, default: false }
 
 }, { timestamps: true });
