@@ -1,4 +1,5 @@
 const UserService = require('../services/user.service');
+const AvatarUrl = require('../services/avatar.service')
 const { signup, signin, signout } = require('../controllers/auth.controller')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -28,6 +29,7 @@ class UserController {
     // Update user
     async updateUser(req, res) {
         const { username, email, password, confirmPassword } = req.body;
+
         // Check if fields we populated
         if (!username || !email || !password || !confirmPassword) {
             return res.status(403).json({
@@ -36,15 +38,29 @@ class UserController {
             })
         }
         else {
+
             // Check if user exists
             try {
+
                 const existingUser = await UserService.fetchUserById(req.params.id);
+
                 if (existingUser) {
-                    const updateUser = await UserService.updateUser(req.params.id, { username: username, email: email, password: password, confirmPassword: confirmPassword });
+
+                    // Generate a new unique avatar for the updated user
+                    let avatar = await AvatarUrl(email);
+                    avatar = `<img src='${avatar}' alt='this is a special avata assisgned to ${email}'>`
+
+                    let updatedUser = await UserService.updateUser(req.params.id, { username: username, email: email, password: password, confirmPassword: confirmPassword, avatar: avatar });
+                    // updatedUser = await updatedUser.save()
+
+                    // Create new token for updated user
+                    const token = createToken(updatedUser._id);
+                    res.cookie('jwt', token, { httpOnly: true, maxAge: constants.maxAgeForCookies });
+
                     return res.status(201).json({
                         success: true,
                         message: 'User successfully updated',
-                        data: updateUser,
+                        data: updatedUser,
                     })
                 }
                 else {
