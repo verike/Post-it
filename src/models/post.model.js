@@ -10,14 +10,15 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    // user: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'user'
-    // },
-    // comments: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'comment'
-    // }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'comment'
+    }],
     isDeleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
