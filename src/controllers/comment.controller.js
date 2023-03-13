@@ -1,5 +1,6 @@
 const CommentModel = require('../models/comment.model');
 const PostModel = require('../models/post.model');
+const UserModel = require('../models/user.model');
 const CommentService = require('../services/comment.service');
 
 class CommentController {
@@ -9,6 +10,15 @@ class CommentController {
 
         // find out the post being commented on
         const postId = req.params.id;
+
+        // Get user id 
+        // And Check if user is logged in        
+
+        if (res.locals.user._id === null) {
+            throw new Error('User not logged in')
+        }
+        const userId = res.locals.user._id
+
 
         // Get comment body text and record post id
         const { body } = req.body;
@@ -20,19 +30,11 @@ class CommentController {
         }
         else {
             try {
-                const comment = await CommentService.createComment({ body: body });
+                const comment = await CommentService.createComment({ body: body, postId: postId, userId: userId });
 
-                // save comment
-                await comment.save();
-                // get this particular post
-                // const postRelated = await PostModel.findById(postId);
-                // push the comment into the post.comments array
-                // postRelated.comments.push(comment);
-                // save and redirect...
-                // await postRelated.save(function (err) {
-                //     if (err) { console.log(err) }
-                    // res.redirect('/')
-                // })
+                // Add comment to user's comment array, and to the post's comment array
+                await UserModel.updateOne({ _id: userId }, { $push: { comments: comment.body } });
+                await PostModel.updateOne({ _id: postId }, { $push: { comments: comment.body } });
 
                 res.status(200).json({
                     success: true,
@@ -65,7 +67,12 @@ class CommentController {
                     })
                 }
                 else {
-                    const comment = await CommentService.updateComment(req.params.id, { body });
+                    const comment = await CommentService.updateComment(req.params.id, { body: body, postId: postId, userId: userId });
+
+                    // Add comment to updated user's comment array, and to the post's comment array
+                    await UserModel.updateOne({ _id: userId }, { $push: { comments: comment.body } });
+                    await PostModel.updateOne({ _id: postId }, { $push: { comments: comment.body } });
+
                     res.status(200).json({
                         success: true,
                         message: 'Comment updated successfully.',
