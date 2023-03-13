@@ -22,7 +22,10 @@ module.exports.requireAuth = async function (req, res, next) {
         })
     }
     else {
-        throw Error('User not logged in')
+        return res.status(404).json({
+            success: false,
+            message: 'User not logged in'
+        })
     }
 }
 
