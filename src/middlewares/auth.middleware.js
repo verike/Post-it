@@ -5,14 +5,14 @@ require('dotenv').config()
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-module.exports.requireAuth = function (req, res, next) {
+module.exports.requireAuth = async function (req, res, next) {
     const token = req.cookies.jwt;
 
     // Check json web token exist
     if (token) {
         jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
             if (err) {
-                console.log(err.message)
+                console.log(err.message);
                 next();
             }
             else {
@@ -33,7 +33,7 @@ module.exports.checkUser = async function (req, res, next) {
     if (token) {
         jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                console.log(err);;
+                console.log(err);
                 res.locals.user = null
                 next();
             }
@@ -46,8 +46,11 @@ module.exports.checkUser = async function (req, res, next) {
         })
     }
     else {
-        res.locals.user = null;
-        next();
+        return res.status(404).json({
+            success: false,
+            message: 'Sign in to continue'
+        })
+        // next();
     }
 }
 
