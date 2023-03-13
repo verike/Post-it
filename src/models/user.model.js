@@ -44,6 +44,8 @@ const userSchema = new Schema({
             message: 'Confirm the password above'
         }
     },
+    
+    // posts array property for storing posts created by a particular user
     posts:  [{
         type: Schema.Types.ObjectId,
         ref: 'post',
