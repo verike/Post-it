@@ -5,7 +5,7 @@ const { requireAuth, checkUser } = require('../middlewares/auth.middleware')
 const router = Router();
 
 router.post('/signup', UserController.create);
-router.post('/signin', checkUser, UserController.signin);
+router.post('/signin', UserController.signin);
 router.post('/signout', checkUser, UserController.signout);
 
 router.get('/:id', requireAuth, UserController.fetchUser);

@@ -1,4 +1,5 @@
 const UserService = require('../services/user.service');
+const AvatarUrl = require('../services/avatar.service')
 const UserModel = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -68,7 +69,11 @@ module.exports.signup = async (req, res) => {
             });
         }
 
-        const newUser = await UserService.createUser({ username, email, password, confirmPassword, posts: [] });
+        // Generate a unique avatar
+        let avatar = await AvatarUrl(email);
+        avatar = `<img src='${avatar}' alt='this is a special avata assisgned to ${email}'>` 
+
+        const newUser = await UserService.createUser({ username, email, password, confirmPassword, avatar, posts: [] });
         const token = createToken(newUser._id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: constants.maxAgeForCookies });
 

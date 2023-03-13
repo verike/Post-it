@@ -5,16 +5,18 @@ const PostModel = require('../models/post.model');
 const commentSchema = new Schema({
     postId: {
         type: Schema.Types.ObjectId,
-        ref: 'post'
+        ref: 'post',
+        required: true
     },
     body: {
         type: String,
         required: true,
         trim: false,
     },
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
+        required: true
     },
     isDeleted: { type: Boolean, default: false }
 }, { timestamps: true });

@@ -4,11 +4,11 @@ const { requireAuth, checkUser } = require('../middlewares/auth.middleware')
 
 const router = Router();
 
-router.post('/add', requireAuth, PostController.createPost);
+router.post('/add', checkUser, PostController.createPost);
 router.get('/:id', PostController.fetchPost);
-router.put('/update/:id', requireAuth, PostController.updatePost);
-router.delete('/:id', requireAuth, PostController.softDeletePost);
-router.get('/user/:id', requireAuth, PostController.fetchUserPosts)
+router.put('/update/:id', checkUser, PostController.updatePost);
+router.delete('/:id', checkUser, PostController.softDeletePost);
+router.get('/user/:id', PostController.fetchUserPosts)
 router.get('/', PostController.fetchPosts);
 
 module.exports = router
